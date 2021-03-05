@@ -22,14 +22,14 @@ def fs_roll():
         while die1 == 6:
             die1 = d6()
             die_pool.append(die1)
-        return f"[{die_pool}] - [{die2}] = {sum(die_pool) - die2}"
+        return f"{die_pool} - [{die2}] = {sum(die_pool) - die2}"
     elif die2 == 6:
         die_pool = []
         die_pool.append(die2)
         while die2 == 6:
             die2 = d6()
             die_pool.append(die1)
-        return f"[{die1}] - [{die_pool}] = {die1 - sum(die_pool)}"
+        return f"[{die1}] - {die_pool} = {die1 - sum(die_pool)}"
     return f"Something didn't work and we got there die1: {die1} die2: {die2}"
 
 
