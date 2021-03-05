@@ -30,32 +30,47 @@ def d6():
     return rng.randint(1, 6)
 
 
+def explode():
+    die = 6
+    die_pool = [6]
+    while die == 6:
+        die = d6()
+        die_pool.append(die)
+    return die_pool
+
+
 def fs_roll(arguments):
     """
     Rolls 2d6, subtracting the latter from the former. If both dice are 6, you get Boxcars, and have to roll again.
     If only 1 die is a 6, reroll it until it isn't a 6, adding the results together. Returns rolls and the math thereof.
+    Inputs:
+        arguments - Expects dictionary from parsed message that ran through fs_argument_parser()
     """
     die1 = d6()
     die2 = d6()
+    swerve = {}  # only used if dice explode
     if die1 == 6 and die2 == 6:
         return "boxcars! Roll again. A success will be Way-Awesome, a failure will be Way-Awful!"
-    elif die1 < 6 and die2 < 6:
+    elif die1 < 6 and die2 < 6 and not arguments:
+        # Return non-exploding roll if there are no arguments to consider
         return f"[{die1}] - [{die2}] = {die1 - die2}"
-    elif die1 == 6:
-        die_pool = []
-        die_pool.append(die1)
-        while die1 == 6:
-            die1 = d6()
-            die_pool.append(die1)
-        return f"{die_pool} - [{die2}] = {sum(die_pool) - die2}"
+    elif die1 == 6:  # If one die explodes, find results, then check for arguments, return if none
+        die_pool = explode()
+        if not arguments:
+            return f"{die_pool} - [{die2}] = {sum(die_pool) - die2}"
+        swerve = {"die1": die_pool, "die2": [die2]}
     elif die2 == 6:
-        die_pool = []
-        die_pool.append(die2)
-        while die2 == 6:
-            die2 = d6()
-            die_pool.append(die1)
-        return f"[{die1}] - {die_pool} = {die1 - sum(die_pool)}"
-    return f"Something didn't work and we got there die1: {die1} die2: {die2}"
+        die_pool = explode()
+        if not arguments:
+            return f"[{die1}] - {die_pool} = {die1 - sum(die_pool)}"
+        swerve = {"die1": [die1], "die2": die_pool}
+    # If we get here, there are arguments to consider.
+    if swerve:  # dice have exploded
+        result = f"a swerve of {swerve['die1']} - {swerve['die2']} = {sum(swerve['die1']) - sum(swerve['die2'])}"
+        return f"Args not yet parsed, but you rolled {result}"
+    else:  # dice have not exploded
+        result = f"a swerve of [{die1}] - [{die2}] = {die1 -die2}"
+        return f"Args not yet parsed, but you rolled {result}"
 
 
 def initiative_roll(speed):
