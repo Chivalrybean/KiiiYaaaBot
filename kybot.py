@@ -34,6 +34,8 @@ def fs_roll():
 
 
 def initiative_roll(speed):
+    if type(speed) != int:
+        return f"Format for Initiative is `/init <intiger>` (your speed value was {speed})"
     die = d6()
     return f"rolled [{die}] + {speed} = {die+speed}"
 
@@ -51,7 +53,10 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-    elif message.content.startswith("/fs"):
-        channel = message.channel
-        user = message.author
+    channel = message.channel
+    user = message.author
+    if message.content.startswith("/fs"):
         await channel.send(f"{user} rolled: fs_roll()")
+    elif message.content.startswith("/init"):
+        speed = message.content.split()[1]
+        await channel.send(f"{user} rolled a {initiative_roll(int(speed))} for their initiative")
