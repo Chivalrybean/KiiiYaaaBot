@@ -4,12 +4,18 @@ import random as rng
 
 # fs = Feng Shui 2 - The Action Movie Role-Playing Game
 
+# Roll a d6 die, return result
+
 
 def d6():
     return rng.randint(1, 6)
 
 
 def fs_roll():
+    """
+    Rolls 2d6, subtracting the latter from the former. If both dice are 6, you get Boxcars, and have to roll again.
+    If only 1 die is a 6, reroll it until it isn't a 6, adding the results together. Returns rolls and the math thereof.
+    """
     die1 = d6()
     die2 = d6()
     if die1 == 6 and die2 == 6:
@@ -34,6 +40,7 @@ def fs_roll():
 
 
 def initiative_roll(speed):
+    """Rolls a d6 and adds the input speed value of the character (input from Discord command)"""
     if type(speed) != int:
         return f"Format for Initiative is `/init <intiger>` (your speed value was {speed})"
     die = d6()
