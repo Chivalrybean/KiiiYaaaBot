@@ -30,7 +30,7 @@ def d6():
     return rng.randint(1, 6)
 
 
-def fs_roll():
+def fs_roll(arguments):
     """
     Rolls 2d6, subtracting the latter from the former. If both dice are 6, you get Boxcars, and have to roll again.
     If only 1 die is a 6, reroll it until it isn't a 6, adding the results together. Returns rolls and the math thereof.
@@ -82,7 +82,9 @@ async def on_message(message):
     channel = message.channel
     user = message.author
     if message.content.startswith("/fs"):
-        await channel.send(f"{user} rolled: fs_roll()")
+        # check for arguments made in the message
+        args = fs_arg_parser(message.content)
+        await channel.send(f"{user} rolled: {fs_roll(args)}")
     elif message.content.startswith("/init"):
         speed = message.content.split()[1]
         await channel.send(f"{user} rolled a {initiative_roll(int(speed))} for their initiative")
