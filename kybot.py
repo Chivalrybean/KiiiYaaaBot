@@ -13,7 +13,7 @@ def fs_roll():
     die1 = d6()
     die2 = d6()
     if die1 == 6 and die2 == 6:
-        return "Boxcars! Roll again. A success will be Way-Awesome, a failure will be Way-Awful!"
+        return "boxcars! Roll again. A success will be Way-Awesome, a failure will be Way-Awful!"
     elif die1 < 6 and die2 < 6:
         return f"[{die1}] - [{die2}] = {die1 - die2}"
     elif die1 == 6:
@@ -31,6 +31,11 @@ def fs_roll():
             die_pool.append(die1)
         return f"[{die1}] - {die_pool} = {die1 - sum(die_pool)}"
     return f"Something didn't work and we got there die1: {die1} die2: {die2}"
+
+
+def initiative_roll(speed):
+    die = d6()
+    return f"rolled [{die}] + {speed} = {die+speed}"
 
 
 client = discord.Client()
