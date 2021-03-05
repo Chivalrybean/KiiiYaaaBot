@@ -49,3 +49,4 @@ async def on_message(message):
     elif message.content.startswith("/fs"):
         channel = message.channel
         user = message.author
+        await channel.send(f"{user} rolled: fs_roll()")
