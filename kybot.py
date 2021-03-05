@@ -39,7 +39,7 @@ client = discord.Client()
 @client.event
 async def on_ready():
     print('The bot has logged in as {0.user}'.format(client))
-    await client.change_presence(status=discord.Status.idle, activity=discord.Game("&island to create invite"))
+    await client.change_presence(status=discord.Status.idle, activity=discord.Game("/fs to roll"))
 
 
 @client.event
