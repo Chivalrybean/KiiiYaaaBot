@@ -5,6 +5,17 @@ import random as rng
 # fs = Feng Shui 2 - The Action Movie Role-Playing Game
 
 
+class action_check:
+    def __init__(self, swerve, action_value: int = 0, targets: int = 0,
+                 toughness: int = 0, weapon_damage: int = 0, defense: int = 0):
+        self.swerve = swerve
+        self.action_value = action_value
+        self.targets = targets
+        self.toughness = toughness
+        self.weapon_damage = weapon_damage
+        self.defense = defense
+
+
 def fs_arg_parser(args_list):
     """returns a dictionary of arguments for fs_roll() to use"""
     action_value = re.search(r"\s[-][a|A][v|V]\s\d+", args_list)
@@ -26,7 +37,7 @@ def fs_arg_parser(args_list):
     return arguments
 
 
-def d6():
+def d6():  # consider making this a more generic die, and the max value being an argument, with optional miniumum=1
     return rng.randint(1, 6)
 
 
@@ -69,7 +80,7 @@ def fs_roll(arguments):
         result = f"a swerve of {swerve['die1']} - {swerve['die2']} = {sum(swerve['die1']) - sum(swerve['die2'])}"
         return f"Args not yet parsed, but you rolled {result}"
     else:  # dice have not exploded
-        result = f"a swerve of [{die1}] - [{die2}] = {die1 -die2}"
+        result = f"a swerve of [{die1}] - [{die2}] = {die1 - die2}"
         return f"Args not yet parsed, but you rolled {result}"
 
 
