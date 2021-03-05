@@ -3,9 +3,10 @@
 Discord bot to assist in playing Feng Shui 2
 
 \*First up
-Set up regular die roller for FS2
+(COMPLETED)Set up regular die roller for FS2
 /fs
 1d6-1d6, 6s explode.
+Checks for Boxcars
 
 Set up arguments for /fs
 -a <number> Add action value
