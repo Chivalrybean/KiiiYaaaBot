@@ -4,7 +4,26 @@ import random as rng
 
 # fs = Feng Shui 2 - The Action Movie Role-Playing Game
 
-# Roll a d6 die, return result
+
+def fs_arg_parser(args_list):
+    """returns a dictionary of arguments for fs_roll() to use"""
+    action_value = re.search(r"\s[-][a|A][v|V]\s\d+", args_list)
+    targets = re.search(r"\s[-][t|T]\s\d+", args_list)
+    toughness = re.search(r"\s[-][t|T][o|O][u|U]\s\d+", args_list)
+    weapon_damage = re.search(r"\s[-][w|W]\s\d+", args_list)
+    defense = re.search(r"\s[-][d|D]\s\d+", args_list)
+    arguments = {}
+    if action_value:
+        arguments["action_value"] = int(action_value.group(0).split()[1])
+    if targets:
+        arguments["targets"] = int(targets.group(0).split()[1])
+    if toughness:
+        arguments["toughness"] = int(toughness.group(0).split()[1])
+    if weapon_damage:
+        arguments["weapon_damage"] = int(weapon_damage.group(0).split()[1])
+    if defense:
+        arguments["defense"] = int(defense.group(0).split()[1])
+    return arguments
 
 
 def d6():
@@ -42,7 +61,7 @@ def fs_roll():
 def initiative_roll(speed):
     """Rolls a d6 and adds the input speed value of the character (input from Discord command)"""
     if type(speed) != int:
-        return f"Format for Initiative is `/init <intiger>` (your speed value was {speed})"
+        return f"Format for Initiative is `/init <intiger>` (your speed value was '{speed}')"
     die = d6()
     return f"rolled [{die}] + {speed} = {die+speed}"
 
