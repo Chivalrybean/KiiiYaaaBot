@@ -1,7 +1,7 @@
 import discord
 import re
 import random as rng
-
+import local_settings as ls
 # fs = Feng Shui 2 - The Action Movie Role-Playing Game
 
 
@@ -114,3 +114,5 @@ async def on_message(message):
     elif message.content.startswith("/init"):
         speed = message.content.split()[1]
         await channel.send(f"{user} rolled a {initiative_roll(int(speed))} for their initiative")
+
+client.run(ls.token)
