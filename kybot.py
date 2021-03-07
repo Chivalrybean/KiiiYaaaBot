@@ -85,7 +85,7 @@ def fs_roll(arguments):
 def mooks(amount, action_value=8):
     rolls = []
     mook = 0
-    while mook < amount:
+    while mook < int(amount):
         die1 = d6()
         if die1 == 6:
             die1 = sum(explode())
@@ -126,7 +126,7 @@ async def on_message(message):
     elif message.content.startswith("/init"):
         speed = message.content.split()[1]
         await channel.send(f"{user} rolled a {initiative_roll(int(speed))} for their initiative")
-    elif message.content.startswith("mooks"):
+    elif message.content.startswith("/mooks"):
         command = message.content.split()
         if len(command) == 3:
             await channel.send(mooks(command[1], command[2]))
