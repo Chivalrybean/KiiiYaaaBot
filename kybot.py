@@ -85,16 +85,21 @@ def fs_roll(arguments):
 def mooks(amount, action_value=8):
     rolls = []
     mook = 0
-    while mook < int(amount):
-        die1 = d6()
-        if die1 == 6:
-            die1 = sum(explode())
-        die2 = d6()
-        if die2 == 6:
-            die2 = sum(explode())
-        rolls.append(die1 - die2 + int(action_value))
-        mook += 1
-    return rolls
+    try:
+        while mook < int(amount):
+            die1 = d6()
+            if die1 == 6:
+                die1 = sum(explode())
+            die2 = d6()
+            if die2 == 6:
+                die2 = sum(explode())
+            rolls.append(die1 - die2 + int(action_value))
+            mook += 1
+        return rolls
+    except ValueError:
+        return f"Did you send other than numbers? amount = {amount} action_value(optional) = {action_value}"
+    except:
+        return "Something went wrong. Try again? /mooks <number of rolls> <mook AV(optional)>"
 
 def initiative_roll(speed):
     """Rolls a d6 and adds the input speed value of the character (input from Discord command)"""
