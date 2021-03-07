@@ -6,8 +6,7 @@ import local_settings as ls
 
 
 class action_check:
-    def __init__(self, swerve, action_value: int = 0, targets: int = 0,
-                 toughness: int = 0, weapon_damage: int = 0, defense: int = 0):
+    def __init__(self, swerve, action_value: int = 0, targets: int = 0, toughness: int = 0, weapon_damage: int = 0, defense: int = 0):
         self.swerve = swerve
         self.action_value = action_value
         self.targets = targets
@@ -83,6 +82,19 @@ def fs_roll(arguments):
         result = f"a swerve of [{die1}] - [{die2}] = {die1 - die2}"
         return f"Args not yet parsed, but you rolled {result}"
 
+def mooks(amount, action_value=8):
+    rolls = []
+    mook = 0
+    while mook < amount:
+        die1 = d6()
+        if die1 == 6:
+            die1 = sum(explode())
+        die2 = d6()
+        if die2 == 6:
+            die2 = sum(explode())
+        rolls.append(die1 - die2 + int(action_value))
+        mook += 1
+    return rolls
 
 def initiative_roll(speed):
     """Rolls a d6 and adds the input speed value of the character (input from Discord command)"""
@@ -114,5 +126,13 @@ async def on_message(message):
     elif message.content.startswith("/init"):
         speed = message.content.split()[1]
         await channel.send(f"{user} rolled a {initiative_roll(int(speed))} for their initiative")
+    elif message.content.startswith("mooks"):
+        command = message.content.split()
+        if len(command) == 3:
+            await channel.send(mooks(command[1], command[2]))
+        elif len(command) == 2:
+            await channel.send(mooks(command[1]))
+        else:
+            await channel.send("Syntax is /mooks <number of rolls> <action_value(optional, default = 8)>")
 
 client.run(ls.token)

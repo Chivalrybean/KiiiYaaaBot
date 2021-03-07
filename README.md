@@ -19,6 +19,8 @@ Set up arguments for /fs
 
 Program reponses to hits, for input of weapon and toughness values, generating a final damage.
 
+Set up /mooks <amount> -av(optional) to generate a number of mook attacks, optionally with something outside the default action value
+
 \*Later
 Shot Counter initiative tracking, and character objects that track wound points, taking action will roll, spend shots, etc. with prompts for adjustments to normal costs (timeout = typical costs)
 
