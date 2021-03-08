@@ -37,17 +37,17 @@ def fs_arg_parser(args_list):
 
 
 def attack_args_calulator(arguments, dice_sum):
-    """Checks the calculation for each argument in an attack roll, returning result of the most recent 
-    complete part of the equation before a 
-    missing argument. Assumes Action Value is present (shouldn't be called if it's not). 
+    """Checks the calculation for each argument in an attack roll, returning result of the most recent
+    complete part of the equation before a
+    missing argument. Assumes Action Value is present (shouldn't be called if it's not).
     """
     try:
         current_sum = arguments["action_value"] + \
             dice_sum - arguments["targets"]
         result = f" + Action Value of {arguments['action_value']} - {arguments['targets']} for multiple targets = {current_sum}"
-    except KeyError
-    current_sum = arguments["action_value"] + dice_sum
-    result = f" + Action Value of {arguments['action_value']} = {current_sum}"
+    except KeyError:
+        current_sum = arguments["action_value"] + dice_sum
+        result = f" + Action Value of {arguments['action_value']} = {current_sum}"
     try:
         current_sum -= arguments["defense"]
         result += f" - Defense of {arguments['action_value']} = {current_sum}"
@@ -57,10 +57,11 @@ def attack_args_calulator(arguments, dice_sum):
         current_sum += arguments["weapon_damage"]
         result += f" + Weapon Damage of {arguments['weapon_damage']} = {current_sum}"
     except KeyError:
-        return result.
+        return result
     try:
         current_sum -= arguments["toughness"]
-        return result += f" - Toughness of {arguments['toughness']} = {current_sum}"
+        result += f" - Toughness of {arguments['toughness']} = {current_sum}"
+        return result
     except KeyError:
         return result
 
@@ -105,10 +106,12 @@ def fs_roll(arguments):
         swerve = {"die1": [die1], "die2": die_pool}
     # If we get here, there are arguments to consider.
     if swerve:  # dice have exploded
-        result = f"a swerve of {swerve['die1']} - {swerve['die2']} = {sum(swerve['die1']) - sum(swerve['die2'])}{attack_args_calulator(arguments)}"
+        dice_sum = sum(swerve['die1']) - sum(swerve['die2'])
+        result = f"a swerve of {swerve['die1']} - {swerve['die2']} = {dice_sum}{attack_args_calulator(arguments, dice_sum)}"
         return result
     else:  # dice have not exploded
-        result = f"a swerve of [{die1}] - [{die2}] = {die1 - die2}{attack_args_calulator(arguments)"
+        dice_sum = die1 - die2
+        result = f"a swerve of [{die1}] - [{die2}] = {dice_sum}{attack_args_calulator(arguments, dice_sum)}"
         return result
 
 
