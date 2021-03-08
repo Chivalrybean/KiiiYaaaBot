@@ -44,7 +44,7 @@ def attack_args_calulator(arguments, dice_sum):
     try:
         current_sum = arguments["action_value"] + \
             dice_sum - arguments["targets"]
-        result = f" + Action Value of {arguments['action_value']} - {arguments["targets"]} for multiple targets = {current_sum}"
+        result = f" + Action Value of {arguments['action_value']} - {arguments['targets']} for multiple targets = {current_sum}"
     except KeyError
     current_sum = arguments["action_value"] + dice_sum
     result = f" + Action Value of {arguments['action_value']} = {current_sum}"
