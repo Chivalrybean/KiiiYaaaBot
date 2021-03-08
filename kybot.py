@@ -124,19 +124,41 @@ async def on_message(message):
         return
     channel = message.channel
     user = message.author
+    if "#" in message.content:
+        comment = "".join(message.content.split("#")[1:])
     if message.content.startswith("/fs"):
         # check for arguments made in the message
         args = fs_arg_parser(message.content)
-        await channel.send(f"{user} rolled: {fs_roll(args)}")
+        reply = f"{user} rolled: {fs_roll(args)}"
+        if comment:
+            reply += f" {comment}"
+        await channel.send(reply)
     elif message.content.startswith("/init"):
         speed = message.content.split()[1]
-        await channel.send(f"{user} rolled a {initiative_roll(int(speed))} for their initiative")
+        reply = f"{user} rolled a {initiative_roll(int(speed))} for their initiative"
+        if comment:
+            reply += f" {comment}"
+        await channel.send(reply)
     elif message.content.startswith("/mooks"):
-        command = message.content.split()
+        if '#' in message.content:
+            cleaner = message.content[0:message.content.find('#')]
+            command = cleaner.split()
+            print(command)
+
+        else:
+            command = message.content.split()
         if len(command) == 3:
-            await channel.send(mooks(command[1], command[2]))
+            reply = str(mooks(command[1], command[2]))
+            if comment:
+                reply += f" {comment}"
+            await channel.send(reply)
         elif len(command) == 2:
-            await channel.send(mooks(command[1]))
+            reply = str(mooks(command[1]))
+            print(reply)
+            print(comment)
+            if comment:
+                reply += f" {comment}"
+            await channel.send(reply)
         else:
             await channel.send("Syntax is /mooks <number of rolls> <action_value(optional, default = 8)>")
 
