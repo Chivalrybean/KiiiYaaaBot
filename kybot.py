@@ -129,10 +129,10 @@ async def on_message(message):
     comment = ""
     command = ""
     if '#' in message.content:
-            comment = "".join(message.content.split("#")[1:])
-            command = message.content[0:message.content.find('#')]
-        else:
-            command = message.content
+        comment = "".join(message.content.split("#")[1:])
+        command = message.content[0:message.content.find('#')]
+    else:
+        command = message.content
     if command.startswith("/fs"):
         # check for arguments made in the message
         args = fs_arg_parser(command)
