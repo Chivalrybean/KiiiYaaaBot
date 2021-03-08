@@ -4,3 +4,4 @@ Include
 Scripts
 pyvenv.cfg
 local_settings.py
+.vscode/settings.json
