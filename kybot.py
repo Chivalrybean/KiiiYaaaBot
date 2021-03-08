@@ -82,6 +82,7 @@ def fs_roll(arguments):
         result = f"a swerve of [{die1}] - [{die2}] = {die1 - die2}"
         return f"Args not yet parsed, but you rolled {result}"
 
+
 def mooks(amount, action_value=8):
     rolls = []
     mook = 0
@@ -100,6 +101,7 @@ def mooks(amount, action_value=8):
         return f"Did you send other than numbers? amount = {amount} action_value(optional) = {action_value}"
     except:
         return "Something went wrong. Try again? /mooks <number of rolls> <mook AV(optional)>"
+
 
 def initiative_roll(speed):
     """Rolls a d6 and adds the input speed value of the character (input from Discord command)"""
@@ -125,27 +127,26 @@ async def on_message(message):
     channel = message.channel
     user = message.author
     comment = ""
-    if "#" in message.content:
-        comment = "".join(message.content.split("#")[1:])
-    if message.content.startswith("/fs"):
+    command = ""
+    if '#' in message.content:
+            comment = "".join(message.content.split("#")[1:])
+            command = message.content[0:message.content.find('#')]
+        else:
+            command = message.content
+    if command.startswith("/fs"):
         # check for arguments made in the message
-        args = fs_arg_parser(message.content)
+        args = fs_arg_parser(command)
         reply = f"{user} rolled: {fs_roll(args)}"
         if comment:
             reply += f" {comment}"
         await channel.send(reply)
-    elif message.content.startswith("/init"):
+    elif command.startswith("/init"):
         speed = message.content.split()[1]
         reply = f"{user} rolled a {initiative_roll(int(speed))} for their initiative"
         if comment:
             reply += f" {comment}"
         await channel.send(reply)
-    elif message.content.startswith("/mooks"):
-        if '#' in message.content:
-            cleaner = message.content[0:message.content.find('#')]
-            command = cleaner.split()
-        else:
-            command = message.content.split()
+    elif command.startswith("/mooks"):
         if len(command) == 3:
             reply = str(mooks(command[1], command[2]))
             if comment:
