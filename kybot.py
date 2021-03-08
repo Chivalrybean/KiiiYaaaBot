@@ -124,6 +124,7 @@ async def on_message(message):
         return
     channel = message.channel
     user = message.author
+    comment = ""
     if "#" in message.content:
         comment = "".join(message.content.split("#")[1:])
     if message.content.startswith("/fs"):
@@ -143,8 +144,6 @@ async def on_message(message):
         if '#' in message.content:
             cleaner = message.content[0:message.content.find('#')]
             command = cleaner.split()
-            print(command)
-
         else:
             command = message.content.split()
         if len(command) == 3:
@@ -154,8 +153,6 @@ async def on_message(message):
             await channel.send(reply)
         elif len(command) == 2:
             reply = str(mooks(command[1]))
-            print(reply)
-            print(comment)
             if comment:
                 reply += f" {comment}"
             await channel.send(reply)
