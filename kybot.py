@@ -176,8 +176,12 @@ async def on_message(message):
             reply += f" {comment}"
         await channel.send(reply)
     elif command.startswith("/init"):
-        speed = message.content.split()[1]
-        reply = f"{user} rolled a {initiative_roll(int(speed))} for their initiative"
+        try:
+            speed = message.content.split()[1]
+            reply = f"{user} rolled a {initiative_roll(int(speed))} for their initiative"
+        except IndexError:
+            await channel.send("Initiative syntax is `/init <Speed>`")
+            return
         if comment:
             reply += f" {comment}"
         await channel.send(reply)
