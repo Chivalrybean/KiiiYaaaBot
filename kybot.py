@@ -163,11 +163,45 @@ async def on_ready():
 
 fs_options = [
     {
-
+        "name": "action_value",
+        "description": "Include the character's Action Value to the roll",
+        "required": False,
+        "Type": 4
+    },
+    {
+        "name": "targets",
+        "description": "How many targets are you trying to hit?",
+        "required": False,
+        "Type": 4
+    },
+    {
+        "name": "defense",
+        "description": "The defense of the target (highest one of multiple targets). Will note miss and stop if < 0",
+        "required": False,
+        "Type": 4
+    },
+    {
+        "name": "weapon_damage",
+        "description": "Include the character's Action Value to the roll",
+        "required": False,
+        "Type": 4
+    },
+    {
+        "name": "toughness",
+        "description": "Toughness of the target.",
+        "required": False,
+        "Type": 4
+    },
+    {
+        "name": "comment",
+        "description": "Something to append onto the end of the roll.",
+        "required": False,
+        "Type": 4
     }
 ]
 
-@slash.slash(name = "fs", description = "Rolls dice for Feng Shui 2", options = fs_options)
+
+@slash.slash(name="fs", description="Outputs standard open roll for Feng Shui 2", options=fs_options)
 async def fs(ctx: SlashContext):
     """Add in the default inputs, AV, etc. Completely rework handling the arguments here."""
     channel = ctx.message.channel
