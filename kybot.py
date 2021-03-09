@@ -182,6 +182,7 @@ async def on_message(message):
             reply += f" {comment}"
         await channel.send(reply)
     elif command.startswith("/mooks"):
+        command = command.split()
         if len(command) == 3:
             reply = str(mooks(command[1], command[2]))
             if comment:
