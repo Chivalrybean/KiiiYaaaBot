@@ -147,7 +147,7 @@ def initiative_roll(speed):
     if type(speed) != int:
         return f"Format for Initiative is `/init <intiger>` (your speed value was '{speed}')"
     die = d6()
-    return f"rolled [{die}] + {speed} = {die+speed}."
+    return f"rolled [{die}] + {speed} = {die+speed}"
 
 
 client = discord.Client()
