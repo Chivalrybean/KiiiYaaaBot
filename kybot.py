@@ -50,7 +50,10 @@ def attack_args_calulator(arguments, dice_sum):
         result = f" + Action Value of {arguments['action_value']} = {current_sum}"
     try:
         current_sum -= arguments["defense"]
-        result += f" - Defense of {arguments['action_value']} = {current_sum}"
+        if current_sum < 0:
+            result += f" - Defense of {arguments['defense']} = {current_sum} which is a miss."
+            return result
+        result += f" - Defense of {arguments['defense']} = {current_sum}"
     except KeyError:
         return result
     try:
