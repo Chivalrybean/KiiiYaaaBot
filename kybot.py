@@ -1,4 +1,6 @@
 import discord
+from discord.ext import commands
+from discord_slash import SlashCommand, SlashCommandOptionType, SlashContext
 import re
 import random as rng
 import local_settings as ls
@@ -150,7 +152,8 @@ def initiative_roll(speed):
     return f"rolled [{die}] + {speed} = {die+speed}"
 
 
-client = discord.Client()
+client = commands.Bot()
+slash = SlashCommand(client, auto_register=True)
 
 
 @client.event
@@ -158,20 +161,24 @@ async def on_ready():
     print('The bot has logged in as {0.user}'.format(client))
     await client.change_presence(status=discord.Status.idle, activity=discord.Game("/fs to roll"))
 
+fs_options = [
+    {
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    channel = message.channel
-    user = message.author
+    }
+]
+
+@slash.slash(name = "fs", description = "Rolls dice for Feng Shui 2", options = fs_options)
+async def fs(ctx: SlashContext):
+    """Add in the default inputs, AV, etc. Completely rework handling the arguments here."""
+    channel = ctx.message.channel
+    user = ctx.message.author
     comment = ""
     command = ""
-    if '#' in message.content:
-        comment = "".join(message.content.split("#")[1:])
-        command = message.content[0:message.content.find('#')]
+    if '#' in ctx.message.content:
+        comment = "".join(ctx.message.content.split("#")[1:])
+        command = ctx.message.content[0:ctx.message.content.find('#')]
     else:
-        command = message.content
+        command = ctx.message.content
     if command.startswith("/fs"):
         # check for arguments made in the message
         args = fs_arg_parser(command)
@@ -179,29 +186,51 @@ async def on_message(message):
         if comment:
             reply += f" {comment}"
         await channel.send(reply)
-    elif command.startswith("/init"):
-        try:
-            speed = message.content.split()[1]
-            reply = f"{user} rolled a {initiative_roll(int(speed))} for their initiative."
-        except IndexError or ValueError:
-            await channel.send("Initiative syntax is `/init <Speed(must be digits)>`")
-            return
-        if comment:
-            reply += f" {comment}"
-        await channel.send(reply)
-    elif command.startswith("/mooks"):
-        command = command.split()
-        if len(command) == 3:
-            reply = str(mooks(command[1], command[2]))
-            if comment:
-                reply += f" {comment}"
-            await channel.send(reply)
-        elif len(command) == 2:
-            reply = str(mooks(command[1]))
-            if comment:
-                reply += f" {comment}"
-            await channel.send(reply)
-        else:
-            await channel.send("Syntax is /mooks <number of rolls> <action_value(optional, default = 8)>")
+
+
+# @client.event
+# async def on_message(message):
+#     if message.author == client.user:
+#         return
+#     channel = message.channel
+#     user = message.author
+#     comment = ""
+#     command = ""
+#     if '#' in message.content:
+#         comment = "".join(message.content.split("#")[1:])
+#         command = message.content[0:message.content.find('#')]
+#     else:
+#         command = message.content
+#     if command.startswith("/fs"):
+#         # check for arguments made in the message
+#         args = fs_arg_parser(command)
+#         reply = f"{user} rolled: {fs_roll(args)}."
+#         if comment:
+#             reply += f" {comment}"
+#         await channel.send(reply)
+#     elif command.startswith("/init"):
+#         try:
+#             speed = message.content.split()[1]
+#             reply = f"{user} rolled a {initiative_roll(int(speed))} for their initiative."
+#         except IndexError or ValueError:
+#             await channel.send("Initiative syntax is `/init <Speed(must be digits)>`")
+#             return
+#         if comment:
+#             reply += f" {comment}"
+#         await channel.send(reply)
+#     elif command.startswith("/mooks"):
+#         command = command.split()
+#         if len(command) == 3:
+#             reply = str(mooks(command[1], command[2]))
+#             if comment:
+#                 reply += f" {comment}"
+#             await channel.send(reply)
+#         elif len(command) == 2:
+#             reply = str(mooks(command[1]))
+#             if comment:
+#                 reply += f" {comment}"
+#             await channel.send(reply)
+#         else:
+#             await channel.send("Syntax is /mooks <number of rolls> <action_value(optional, default = 8)>")
 
 client.run(ls.token)
