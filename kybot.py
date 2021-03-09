@@ -179,8 +179,8 @@ async def on_message(message):
         try:
             speed = message.content.split()[1]
             reply = f"{user} rolled a {initiative_roll(int(speed))} for their initiative"
-        except IndexError:
-            await channel.send("Initiative syntax is `/init <Speed>`")
+        except IndexError or ValueError:
+            await channel.send("Initiative syntax is `/init <Speed(must be digits)>`")
             return
         if comment:
             reply += f" {comment}"
