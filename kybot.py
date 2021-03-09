@@ -143,7 +143,7 @@ def initiative_roll(speed):
     if type(speed) != int:
         return f"Format for Initiative is `/init <intiger>` (your speed value was '{speed}')"
     die = d6()
-    return f"rolled [{die}] + {speed} = {die+speed}"
+    return f"rolled [{die}] + {speed} = {die+speed}."
 
 
 client = discord.Client()
@@ -171,14 +171,14 @@ async def on_message(message):
     if command.startswith("/fs"):
         # check for arguments made in the message
         args = fs_arg_parser(command)
-        reply = f"{user} rolled: {fs_roll(args)}"
+        reply = f"{user} rolled: {fs_roll(args)}."
         if comment:
             reply += f" {comment}"
         await channel.send(reply)
     elif command.startswith("/init"):
         try:
             speed = message.content.split()[1]
-            reply = f"{user} rolled a {initiative_roll(int(speed))} for their initiative"
+            reply = f"{user} rolled a {initiative_roll(int(speed))} for their initiative."
         except IndexError or ValueError:
             await channel.send("Initiative syntax is `/init <Speed(must be digits)>`")
             return
