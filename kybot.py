@@ -33,21 +33,26 @@ def fs_arg_parser(args_list):
         arguments["weapon_damage"] = int(weapon_damage.group(0).split()[1])
     if toughness:
         arguments["toughness"] = int(toughness.group(0).split()[1])
+    print(arguments)
     return arguments
 
 
 def attack_args_calulator(arguments, dice_sum):
     """Checks the calculation for each argument in an attack roll, returning result of the most recent
     complete part of the equation before a
-    missing argument. Assumes Action Value is present (shouldn't be called if it's not).
+    missing argument.
     """
     try:
         current_sum = arguments["action_value"] + \
             dice_sum - arguments["targets"]
         result = f" + Action Value of {arguments['action_value']} - {arguments['targets']} for multiple targets = {current_sum}"
     except KeyError:
-        current_sum = arguments["action_value"] + dice_sum
-        result = f" + Action Value of {arguments['action_value']} = {current_sum}"
+        try:
+            current_sum = arguments["action_value"] + dice_sum
+            result = f" + Action Value of {arguments['action_value']} = {current_sum}"
+        except KeyError:
+            result = ". No Action Value `-av <digits>` supplied. Calculation prevented"
+            return result
     try:
         current_sum -= arguments["defense"]
         if current_sum < 0:
