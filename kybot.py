@@ -33,7 +33,6 @@ def fs_arg_parser(args_list):
         arguments["weapon_damage"] = int(weapon_damage.group(0).split()[1])
     if toughness:
         arguments["toughness"] = int(toughness.group(0).split()[1])
-    print(arguments)
     return arguments
 
 
