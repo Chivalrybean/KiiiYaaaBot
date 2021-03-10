@@ -152,8 +152,10 @@ def initiative_roll(speed):
     return f"rolled [{die}] + {speed} = {die+speed}"
 
 
-client = commands.Bot()
-slash = SlashCommand(client, auto_register=True)
+guild_ids = [701612732062892153, 351522944461307915]
+
+client = discord.Client(intents=discord.Intents.all())
+slash = SlashCommand(client, sync_commands=True)
 
 
 @client.event
@@ -201,25 +203,22 @@ fs_options = [
 ]
 
 
-@slash.slash(name="fs", description="Outputs standard open roll for Feng Shui 2", options=fs_options)
-async def fs(ctx: SlashContext):
+def append_comment(comment):
+    if comment is not None:
+        return f". {comment}"
+    else:
+        return "."
+
+
+@slash.slash(name="fs", description="Outputs standard open roll for Feng Shui 2", options=fs_options, guild_ids=guild_ids)
+async def _fs(ctx, action_value=None, targets=None, defense=None, weapon_damage=None, toughness=None, comment=None):
     """Add in the default inputs, AV, etc. Completely rework handling the arguments here."""
+    await ctx.respond()
     channel = ctx.message.channel
     user = ctx.message.author
-    comment = ""
-    command = ""
-    if '#' in ctx.message.content:
-        comment = "".join(ctx.message.content.split("#")[1:])
-        command = ctx.message.content[0:ctx.message.content.find('#')]
-    else:
-        command = ctx.message.content
-    if command.startswith("/fs"):
-        # check for arguments made in the message
-        args = fs_arg_parser(command)
-        reply = f"{user} rolled: {fs_roll(args)}."
-        if comment:
-            reply += f" {comment}"
-        await channel.send(reply)
+    # This is there the changes must begin
+    die1 = d6()
+    die2 = d6()
 
 
 # @client.event
