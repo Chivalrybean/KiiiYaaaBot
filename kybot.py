@@ -11,27 +11,28 @@ class Swerve:
     def __init__(self, die1, die2):
         self.die1 = die1
         self.die2 = die2
-        self.total = sum(self.die1) - sum(self.die2)
+        self.total = sum(die1) - sum(die2)
 
     def get_total(self):
         return self.total
         
     def __repr__(self):
-        f"{self.die1} - {self.die2} = {self.total}"
+        return f"{self.die1} - {self.die2} = {self.total}"
 
 class Action_check:
-    def __init__(self, swerve, action_value, targets, defense, weapon_damage, toughness):
+    def __init__(self, swerve, action_value, targets, defense, weapon_damage, toughness, comment):
         self.swerve = swerve
         self.action_value = action_value
         self.targets = targets
         self.defense = defense
         self.weapon_damage = weapon_damage
         self.toughness = toughness
+        self.comment = comment
         self.result = self.generate_result()
     # When checking the various arguments, I don't need to do else statements, only ifs!
     def generate_result(self):
-        response = f"{swerve}"
-        current_total = swerve.get_total()
+        response = f"{self.swerve}"
+        current_total = self.swerve.get_total()
         if self.action_value is not None:
             current_total += self.action_value
             response += f" + Action Value of {self.action_value}"
@@ -61,7 +62,7 @@ class Action_check:
                 response += f" = {current_total}."
         return response
     def __repr__(self):
-        self.result()
+        return self.result
 
 def swerve_roller(die1, die2):
     while die1 !=6 and die2 != 6:
@@ -271,21 +272,21 @@ def append_comment(comment):
 @slash.slash(name="fs", description="Outputs standard open roll for Feng Shui 2", options=fs_options, guild_ids=guild_ids)
 async def _fs(ctx, action_value=None, targets=None, defense=None, weapon_damage=None, toughness=None, comment=None):
     """Add in the default inputs, AV, etc. Completely rework handling the arguments here."""
-    await ctx.respond()
-    channel = ctx.message.channel
-    user = ctx.message.author
+    # await ctx.respond()
+    channel = ctx.channel
+    user = ctx.author
     # This is there the changes must begin
     die1 = d6()
     die2 = d6()
     if die1 == 6 and die2 == 6:
-        channel.send("{user} rolled Boxcars! Rerolling for a Way-Awesome Success, or Way-Awful Failure!")
-        reroll = channel.send("rerolling ...")
-        asyncio.sleep(3)
-        response = Action_check(swerve_roller(die1, die2), action_value, targets, defense, weapon_damage, toughness)
-        reroll.edit(f"{user} rolled {response}")
+        await channel.send("{user} rolled Boxcars! Rerolling for a Way-Awesome Success, or Way-Awful Failure!")
+        reroll = await channel.send("rerolling ...")
+        await asyncio.sleep(3)
+        response = Action_check(swerve_roller(die1, die2), action_value, targets, defense, weapon_damage, toughness, comment)
+        await reroll.edit(f"{user} rolled {response}")
     else:
-        response = Action_check(swerve_roller(die1, die2), action_value, targets, defense, weapon_damage, toughness)
-        reroll.edit(f"{user} rolled {response}")
+        response = Action_check(swerve_roller(die1, die2), action_value, targets, defense, weapon_damage, toughness, comment)
+        await channel.send(f"{user} rolled {response}")
 
 
 # @client.event
