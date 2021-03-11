@@ -7,6 +7,7 @@ import local_settings as ls
 import asyncio
 # fs = Feng Shui 2 - The Action Movie Role-Playing Game
 
+
 class Swerve:
     def __init__(self, die1, die2):
         self.die1 = die1
@@ -15,9 +16,10 @@ class Swerve:
 
     def get_total(self):
         return self.total
-        
+
     def __repr__(self):
         return f"{self.die1} - {self.die2} = {self.total}"
+
 
 class Action_check:
     def __init__(self, swerve, action_value, targets, defense, weapon_damage, toughness, comment):
@@ -30,6 +32,7 @@ class Action_check:
         self.comment = comment
         self.result = self.generate_result()
     # When checking the various arguments, I don't need to do else statements, only ifs!
+
     def generate_result(self):
         response = f"{self.swerve}"
         current_total = self.swerve.get_total()
@@ -59,14 +62,15 @@ class Action_check:
                 response += f" = {current_total}."
         else:
             if self.comment is not None:
-                response =+ f". {self.comment}"
+                response += f". {self.comment}"
         return response
 
     def __repr__(self):
         return self.result
 
+
 def swerve_roller(die1, die2):
-    while die1 !=6 and die2 != 6:
+    while die1 != 6 and die2 != 6:
         die1 = d6()
         die2 = d6()
     if die1 == 6:
@@ -76,6 +80,7 @@ def swerve_roller(die1, die2):
     else:
         die1, die2 = [die1], [die2]
     return Swerve(die1, die2)
+
 
 def fs_arg_parser(args_list):
     """returns a dictionary of arguments for fs_roll() to use"""
@@ -282,10 +287,12 @@ async def _fs(ctx, action_value=None, targets=None, defense=None, weapon_damage=
         await channel.send("{user} rolled Boxcars! Rerolling for a Way-Awesome Success, or Way-Awful Failure!")
         reroll = await channel.send("rerolling ...")
         await asyncio.sleep(3)
-        response = Action_check(swerve_roller(die1, die2), action_value, targets, defense, weapon_damage, toughness, comment)
+        response = Action_check(swerve_roller(
+            die1, die2), action_value, targets, defense, weapon_damage, toughness, comment)
         await reroll.edit(f"{user} rolled {response}")
     else:
-        response = Action_check(swerve_roller(die1, die2), action_value, targets, defense, weapon_damage, toughness, comment)
+        response = Action_check(swerve_roller(
+            die1, die2), action_value, targets, defense, weapon_damage, toughness, comment)
         await channel.send(f"{user} rolled {response}")
 
 
