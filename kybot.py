@@ -54,13 +54,14 @@ class Action_check:
                         current_total -= self.toughness
                         response += f" - toughness of {self.toughness}"
             if self.comment is not None:
-                response += f". {self.comment}"
-        else:
-            if self.comment is not None:
-                response =+ f" = {current_total}. {self.comment}"
+                response += f" = {current_total}. {self.comment}"
             else:
                 response += f" = {current_total}."
+        else:
+            if self.comment is not None:
+                response =+ f". {self.comment}"
         return response
+
     def __repr__(self):
         return self.result
 
@@ -257,7 +258,7 @@ fs_options = [
         "name": "comment",
         "description": "Something to append onto the end of the roll.",
         "required": False,
-        "type": 4
+        "type": 3
     }
 ]
 
@@ -272,10 +273,9 @@ def append_comment(comment):
 @slash.slash(name="fs", description="Outputs standard open roll for Feng Shui 2", options=fs_options, guild_ids=guild_ids)
 async def _fs(ctx, action_value=None, targets=None, defense=None, weapon_damage=None, toughness=None, comment=None):
     """Add in the default inputs, AV, etc. Completely rework handling the arguments here."""
-    # await ctx.respond()
+    await ctx.respond()
     channel = ctx.channel
     user = ctx.author
-    # This is there the changes must begin
     die1 = d6()
     die2 = d6()
     if die1 == 6 and die2 == 6:
