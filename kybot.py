@@ -4,18 +4,76 @@ from discord_slash import SlashCommand, SlashCommandOptionType, SlashContext
 import re
 import random as rng
 import local_settings as ls
+import asyncio
 # fs = Feng Shui 2 - The Action Movie Role-Playing Game
 
+class Swerve:
+    def __init__(self, die1, die2):
+        self.die1 = die1
+        self.die2 = die2
+        self.total = sum(self.die1) - sum(self.die2)
 
-class action_check:
-    def __init__(self, swerve, action_value: int = 0, targets: int = 0, toughness: int = 0, weapon_damage: int = 0, defense: int = 0):
+    def get_total(self):
+        return self.total
+        
+    def __repr__(self):
+        f"{self.die1} - {self.die2} = {self.total}"
+
+class Action_check:
+    def __init__(self, swerve, action_value, targets, defense, weapon_damage, toughness):
         self.swerve = swerve
         self.action_value = action_value
         self.targets = targets
-        self.toughness = toughness
-        self.weapon_damage = weapon_damage
         self.defense = defense
+        self.weapon_damage = weapon_damage
+        self.toughness = toughness
+        self.result = self.generate_result()
+    # When checking the various arguments, I don't need to do else statements, only ifs!
+    def generate_result(self):
+        response = f"{swerve}"
+        current_total = swerve.get_total()
+        if self.action_value is not None:
+            current_total += self.action_value
+            response += f" + Action Value of {self.action_value}"
+            if self.targets is not None:
+                current_total -= self.targets
+                response += f" - {self.targets} for multiple targets"
+            if self.defense is not None:
+                current_total -= self.defense
+                response += f" - defense of {self.defense}"
+                if current_total < 0:
+                    response += f" = {current_total}, which is a miss."
+                    if self.comment is not None:
+                        response += f" {self.comment}"
+                    return response
+                if self.weapon_damage is not None:
+                    current_total += self.weapon_damage
+                    response += f" + weapon damage of {self.weapon_damage}"
+                    if self.toughness is not None:
+                        current_total -= self.toughness
+                        response += f" - toughness of {self.toughness}"
+            if self.comment is not None:
+                response += f". {self.comment}"
+        else:
+            if self.comment is not None:
+                response =+ f" = {current_total}. {self.comment}"
+            else:
+                response += f" = {current_total}."
+        return response
+    def __repr__(self):
+        self.result()
 
+def swerve_roller(die1, die2):
+    while die1 !=6 and die2 != 6:
+        die1 = d6()
+        die2 = d6()
+    if die1 == 6:
+        die1, die2 = explode(), [die2]
+    elif die2 == 6:
+        die1, die2 = [die1], explode()
+    else:
+        die1, die2 = [die1], [die2]
+    return Swerve(die1, die2)
 
 def fs_arg_parser(args_list):
     """returns a dictionary of arguments for fs_roll() to use"""
@@ -154,7 +212,7 @@ def initiative_roll(speed):
 
 guild_ids = [701612732062892153, 351522944461307915]
 
-client = discord.Client(intents=discord.Intents.all())
+client = commands.Bot(command_prefix="/")
 slash = SlashCommand(client, sync_commands=True)
 
 
@@ -168,37 +226,37 @@ fs_options = [
         "name": "action_value",
         "description": "Include the character's Action Value to the roll",
         "required": False,
-        "Type": 4
+        "type": 4
     },
     {
         "name": "targets",
         "description": "How many targets are you trying to hit?",
         "required": False,
-        "Type": 4
+        "type": 4
     },
     {
         "name": "defense",
         "description": "The defense of the target (highest one of multiple targets). Will note miss and stop if < 0",
         "required": False,
-        "Type": 4
+        "type": 4
     },
     {
         "name": "weapon_damage",
         "description": "Include the character's Action Value to the roll",
         "required": False,
-        "Type": 4
+        "type": 4
     },
     {
         "name": "toughness",
         "description": "Toughness of the target.",
         "required": False,
-        "Type": 4
+        "type": 4
     },
     {
         "name": "comment",
         "description": "Something to append onto the end of the roll.",
         "required": False,
-        "Type": 4
+        "type": 4
     }
 ]
 
@@ -219,6 +277,15 @@ async def _fs(ctx, action_value=None, targets=None, defense=None, weapon_damage=
     # This is there the changes must begin
     die1 = d6()
     die2 = d6()
+    if die1 == 6 and die2 == 6:
+        channel.send("{user} rolled Boxcars! Rerolling for a Way-Awesome Success, or Way-Awful Failure!")
+        reroll = channel.send("rerolling ...")
+        asyncio.sleep(3)
+        response = Action_check(swerve_roller(die1, die2), action_value, targets, defense, weapon_damage, toughness)
+        reroll.edit(f"{user} rolled {response}")
+    else:
+        response = Action_check(swerve_roller(die1, die2), action_value, targets, defense, weapon_damage, toughness)
+        reroll.edit(f"{user} rolled {response}")
 
 
 # @client.event
