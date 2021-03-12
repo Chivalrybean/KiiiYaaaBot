@@ -216,4 +216,21 @@ async def _mooks(ctx, amount=1, action_value=8):
     channel = ctx.channel
     channel.send(f"{mooks(amount, action_value)} {ctx.content}")
 
+
+init_options = [
+    {
+        "name": "speed",
+        "description": "The speed value of your character",
+        "required": True,
+        "type": 4
+    }
+]
+
+
+@slash.slash(name="init", description="Roll for initiative (Feng Shui 2)!", options=init_options, guild_ids=guild_ids)
+async def _mooks(ctx, speed):
+    await ctx.respond()
+    channel = ctx.channel
+    channel.send(f"{initiative_roll(speed)} {ctx.content}")
+
 client.run(ls.token)
