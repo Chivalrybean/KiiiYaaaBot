@@ -284,7 +284,7 @@ async def _fs(ctx, action_value=None, targets=None, defense=None, weapon_damage=
     die1 = d6()
     die2 = d6()
     if die1 == 6 and die2 == 6:
-        await channel.send("{user} rolled Boxcars! Rerolling for a Way-Awesome Success, or Way-Awful Failure!")
+        await channel.send(f"{user} rolled Boxcars! Rerolling for a Way-Awesome Success, or Way-Awful Failure!")
         reroll = await channel.send("rerolling ...")
         await asyncio.sleep(3)
         response = Action_check(swerve_roller(
