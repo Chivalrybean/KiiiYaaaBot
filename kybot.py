@@ -70,7 +70,7 @@ class Action_check:
 
 
 def swerve_roller(die1, die2):
-    while die1 != 6 and die2 != 6:
+    while die1 == 6 and die2 == 6:
         die1 = d6()
         die2 = d6()
     if die1 == 6:
@@ -283,17 +283,14 @@ async def _fs(ctx, action_value=None, targets=None, defense=None, weapon_damage=
     user = ctx.author
     die1 = d6()
     die2 = d6()
-    print(f"die1: {die1} - die2: {die2} - START")
     if die1 == 6 and die2 == 6:
-        print(f"die1: {die1} - die2: {die2} - SHOULD")
         await channel.send(f"{user} rolled Boxcars! Rerolling for a Way-Awesome Success, or Way-Awful Failure!")
-        reroll = await channel.send("rerolling ...")
+        await channel.send("rerolling ...")
         await asyncio.sleep(3)
         response = Action_check(swerve_roller(
             die1, die2), action_value, targets, defense, weapon_damage, toughness, comment)
-        await reroll.edit(f"{user} rolled {response}")
+        await channel.send(f"{user} rolled {response}")
     else:
-        print(f"die1: {die1} - die2: {die2} - SHOULDN'T")
         response = Action_check(swerve_roller(
             die1, die2), action_value, targets, defense, weapon_damage, toughness, comment)
         await channel.send(f"{user} rolled {response}")
