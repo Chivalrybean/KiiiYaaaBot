@@ -231,6 +231,16 @@ init_options = [
 async def _mooks(ctx, speed):
     await ctx.respond()
     channel = ctx.channel
-    channel.send(f"{initiative_roll(speed)} {ctx.content}")
+    user = ctx.author
+    channel.send(
+        f"{user }rolled {initiative_roll(speed)} for initiative. {ctx.content}")
+
+
+@slash.slash(name="d6", description="Roll a six-sided die, for fortune, or other abilities", guild_ids=guild_ids)
+async def _d6(ctx):
+    await ctx.respond()
+    channel = ctx.channel
+    user = ctx.author
+    channel.send(f"{user} rolled a {d6()}. {ctx.content}")
 
 client.run(ls.token)
