@@ -57,9 +57,9 @@ class Action_check:
                         current_total -= self.toughness
                         response += f" - toughness of {self.toughness}"
             if self.comment is not None:
-                response += f" = {current_total}. {self.comment}"
+                response += f" = **{current_total}**. {self.comment}"
             else:
-                response += f" = {current_total}."
+                response += f" = **{current_total}**."
         else:
             if self.comment is not None:
                 response += f". {self.comment}"
@@ -183,16 +183,16 @@ async def _fs(ctx, action_value=None, targets=None, defense=None, weapon_damage=
     die1 = d6()
     die2 = d6()
     if die1 == 6 and die2 == 6:
-        await channel.send(f"{user} rolled Boxcars! Rerolling for a Way-Awesome Success, or Way-Awful Failure!")
+        await channel.send(f"<@{user.id}> rolled Boxcars! Rerolling for a Way-Awesome Success, or Way-Awful Failure!")
         await channel.send("rerolling ...")
         await asyncio.sleep(3)
         response = Action_check(swerve_roller(
             die1, die2), action_value, targets, defense, weapon_damage, toughness, comment)
-        await channel.send(f"{user} rolled {response}")
+        await channel.send(f"<@{user.id}> rolled {response}")
     else:
         response = Action_check(swerve_roller(
             die1, die2), action_value, targets, defense, weapon_damage, toughness, comment)
-        await channel.send(f"{user} rolled {response}")
+        await channel.send(f"<@{user.id}> rolled {response}")
 
 mook_options = [
     {
@@ -202,7 +202,7 @@ mook_options = [
         "type": 4
     },
     {
-        "name": "avtion_value",
+        "name": "action_value",
         "description": "Adjust the standard AV of 8",
         "required": False,
         "type": 4
@@ -214,7 +214,7 @@ mook_options = [
 async def _mooks(ctx, amount=1, action_value=8):
     await ctx.respond()
     channel = ctx.channel
-    channel.send(f"{mooks(amount, action_value)} {ctx.content}")
+    await channel.send(f"{mooks(amount, action_value)}")
 
 
 init_options = [
@@ -232,8 +232,8 @@ async def _mooks(ctx, speed):
     await ctx.respond()
     channel = ctx.channel
     user = ctx.author
-    channel.send(
-        f"{user }rolled {initiative_roll(speed)} for initiative. {ctx.content}")
+    await channel.send(
+        f"<@{user.id}> rolled {initiative_roll(speed)} for initiative.")
 
 
 @slash.slash(name="d6", description="Roll a six-sided die, for fortune, or other abilities", guild_ids=guild_ids)
@@ -241,6 +241,6 @@ async def _d6(ctx):
     await ctx.respond()
     channel = ctx.channel
     user = ctx.author
-    channel.send(f"{user} rolled a {d6()}. {ctx.content}")
+    await channel.send(f"<@{user.id}> rolled a {d6()}.")
 
 client.run(ls.token)
