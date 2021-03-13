@@ -18,7 +18,7 @@ class Swerve:
         return self.total
 
     def __repr__(self):
-        return f"{self.die1} - {self.die2} = {self.total}"
+        return f"{self.die1} - {self.die2} = **{self.total}**"
 
 
 class Action_check:
