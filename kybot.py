@@ -46,7 +46,7 @@ class Action_check:
                 current_total -= self.defense
                 response += f" - defense of {self.defense}"
                 if current_total < 0:
-                    response += f" = {current_total}, which is a miss."
+                    response += f" = **{current_total}**, which is a miss."
                     if self.comment is not None:
                         response += f" {self.comment}"
                     return response
