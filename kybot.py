@@ -8,14 +8,24 @@ import asyncio
 # fs = Feng Shui 2 - The Action Movie Role-Playing Game
 
 
+class Character:
+    pass
+
+
 class Shot_tracker:
     def __init__(self, characters=[]):
         self.characters = characters
         self.shots = dict()
         self.shots.update([(num, []) for num in range(-5, 21)])
 
-    def move_character(self, character):
-        pass
+    def move_character(self, character, shots_spent=3):
+        current_shot = character.shot
+        new_shot = None
+        if current_shot - shots_spent < -5:
+            new_shot = current_shot - shots_spent
+        else:
+            new_shot = -5
+        # Move character from current position and into new position
 
     def roll_initiative(self):
         pass
