@@ -5,6 +5,7 @@ import re
 import random as rng
 import local_settings as ls
 import asyncio
+from xcard import xcard
 # fs = Feng Shui 2 - The Action Movie Role-Playing Game
 
 
@@ -175,24 +176,24 @@ fs_options = [
 
 
 @slash.slash(name="fs", description="Outputs standard open roll for Feng Shui 2", options=fs_options, guild_ids=guild_ids)
-async def _fs(ctx, action_value=None, targets=None, defense=None, weapon_damage=None, toughness=None, comment=None):
+async def _fs(ctx: SlashContext, action_value=None, targets=None, defense=None, weapon_damage=None, toughness=None, comment=None):
     """Add in the default inputs, AV, etc. Completely rework handling the arguments here."""
-    await ctx.respond()
-    channel = ctx.channel
+    # await ctx.respond()
+    # channel = ctx.channel
     user = ctx.author
     die1 = d6()
     die2 = d6()
     if die1 == 6 and die2 == 6:
-        await channel.send(f"<@{user.id}> rolled Boxcars! Rerolling for a Way-Awesome Success, or Way-Awful Failure!")
-        await channel.send("rerolling ...")
+        await ctx.send(f"<@{user.id}> rolled Boxcars! Rerolling for a Way-Awesome Success, or Way-Awful Failure!")
+        await ctx.send("rerolling ...")
         await asyncio.sleep(3)
         response = Action_check(swerve_roller(
             die1, die2), action_value, targets, defense, weapon_damage, toughness, comment)
-        await channel.send(f"<@{user.id}> rolled {response}")
+        await ctx.send(f"<@{user.id}> rolled {response}")
     else:
         response = Action_check(swerve_roller(
             die1, die2), action_value, targets, defense, weapon_damage, toughness, comment)
-        await channel.send(f"<@{user.id}> rolled {response}")
+        await ctx.send(f"<@{user.id}> rolled {response}")
 
 mook_options = [
     {
@@ -211,10 +212,10 @@ mook_options = [
 
 
 @slash.slash(name="mooks", description="Roll some mook rolls!", options=mook_options, guild_ids=guild_ids)
-async def _mooks(ctx, amount=1, action_value=8):
-    await ctx.respond()
-    channel = ctx.channel
-    await channel.send(f"{mooks(amount, action_value)}")
+async def _mooks(ctx: SlashContext, amount=1, action_value=8):
+    # await ctx.respond()
+    # channel = ctx.channel
+    await ctx.send(f"{mooks(amount, action_value)}")
 
 
 init_options = [
@@ -228,19 +229,41 @@ init_options = [
 
 
 @slash.slash(name="init", description="Roll for initiative (Feng Shui 2)!", options=init_options, guild_ids=guild_ids)
-async def _mooks(ctx, speed):
-    await ctx.respond()
-    channel = ctx.channel
+async def _mooks(ctx: SlashContext, speed):
+    # await ctx.respond()
+    # channel = ctx.channel
     user = ctx.author
-    await channel.send(
+    await ctx.send(
         f"<@{user.id}> rolled {initiative_roll(speed)} for initiative.")
 
+xcard_options = [
+    {
+        "name":"verify",
+        "description": "Type True if you're using this for intended purpose. Don't use as a joke.",
+        "required": True,
+        "type": 5
+    },
+    {
+        "name":"reason",
+        "description":"If you wish, you can provide a reason, it is not required.",
+        "required": False,
+        "type": 3
+    }
+]
 
 @slash.slash(name="d6", description="Roll a six-sided die, for fortune, or other abilities", guild_ids=guild_ids)
-async def _d6(ctx):
-    await ctx.respond()
-    channel = ctx.channel
+async def _d6(ctx: SlashContext):
+    # await ctx.respond()
+    # channel = ctx.channel
     user = ctx.author
-    await channel.send(f"<@{user.id}> rolled a {d6()}.")
+    await ctx.send(f"<@{user.id}> rolled a {d6()}.")
+
+@slash.slash(name="xcard", description="Request a pause in RPG game to redirect away from something.", guild_ids=guild_ids, options=xcard_options)
+async def _xcard(ctx, verify=False, reason="No specifics given"):
+    # await ctx.respond()
+    # channel = ctx.channel
+    user = ctx.author
+    await ctx.send(f"<@{user.id}> placed an X Card on the table\n{xcard}\nReason: {reason}")
+
 
 client.run(ls.token)
