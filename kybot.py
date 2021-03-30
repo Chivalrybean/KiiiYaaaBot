@@ -184,12 +184,13 @@ async def _fs(ctx: SlashContext, action_value=None, targets=None, defense=None, 
     die1 = d6()
     die2 = d6()
     if die1 == 6 and die2 == 6:
-        await ctx.send(f"<@{user.id}> rolled Boxcars! Rerolling for a Way-Awesome Success, or Way-Awful Failure!")
-        await ctx.send("rerolling ...")
+        await ctx.send(f"<@{user.id}> rolled Boxcars[6][6]! Rerolling for a Way-Awesome Success, or Way-Awful Failure!")
+        await asyncio.sleep(3)
+        reroll = await ctx.send("rerolling ...")
         await asyncio.sleep(3)
         response = Action_check(swerve_roller(
             die1, die2), action_value, targets, defense, weapon_damage, toughness, comment)
-        await ctx.send(f"<@{user.id}> rolled {response}")
+        await reroll.edit(content=f"<@{user.id}> rolled {response}")
     else:
         response = Action_check(swerve_roller(
             die1, die2), action_value, targets, defense, weapon_damage, toughness, comment)
