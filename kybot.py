@@ -143,12 +143,6 @@ fs_options = [
         "type": 4
     },
     {
-        "name": "targets",
-        "description": "How many targets are you trying to hit?",
-        "required": False,
-        "type": 4
-    },
-    {
         "name": "defense",
         "description": "The defense of the target (highest one of multiple targets). Will note miss and stop if < 0",
         "required": False,
@@ -171,6 +165,12 @@ fs_options = [
         "description": "Something to append onto the end of the roll.",
         "required": False,
         "type": 3
+    },
+    {
+        "name": "targets",
+        "description": "How many targets are you trying to hit?",
+        "required": False,
+        "type": 4
     }
 ]
 
