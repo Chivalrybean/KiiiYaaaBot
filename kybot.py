@@ -176,7 +176,7 @@ fs_options = [
 
 
 @slash.slash(name="fs", description="Outputs standard open roll for Feng Shui 2", options=fs_options, guild_ids=guild_ids)
-async def _fs(ctx: SlashContext, action_value=None, targets=None, defense=None, weapon_damage=None, toughness=None, comment=None):
+async def _fs(ctx: SlashContext, action_value=None,  defense=None, weapon_damage=None, toughness=None, targets=None, comment=None):
     """Add in the default inputs, AV, etc. Completely rework handling the arguments here."""
     # await ctx.respond()
     # channel = ctx.channel
