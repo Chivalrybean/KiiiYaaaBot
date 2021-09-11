@@ -124,7 +124,7 @@ def initiative_roll(speed):
     return f"rolled [{die}] + {speed} = {die+speed}"
 
 
-guild_ids = [701612732062892153, 351522944461307915, 211911514280427520]
+guild_ids = [701612732062892153, 351522944461307915, 744314317473579078]
 
 client = commands.Bot(command_prefix="/")
 slash = SlashCommand(client, sync_commands=True)
@@ -239,18 +239,19 @@ async def _mooks(ctx: SlashContext, speed):
 
 xcard_options = [
     {
-        "name":"verify",
+        "name": "verify",
         "description": "Type True if you're using this for intended purpose. Don't use as a joke.",
         "required": True,
         "type": 5
     },
     {
-        "name":"reason",
-        "description":"If you wish, you can provide a reason, it is not required.",
+        "name": "reason",
+        "description": "If you wish, you can provide a reason, it is not required.",
         "required": False,
         "type": 3
     }
 ]
+
 
 @slash.slash(name="d6", description="Roll a six-sided die, for fortune, or other abilities", guild_ids=guild_ids)
 async def _d6(ctx: SlashContext):
@@ -258,6 +259,7 @@ async def _d6(ctx: SlashContext):
     # channel = ctx.channel
     user = ctx.author
     await ctx.send(f"<@{user.id}> rolled a {d6()}.")
+
 
 @slash.slash(name="xcard", description="Request a pause in RPG game to redirect away from something.", guild_ids=guild_ids, options=xcard_options)
 async def _xcard(ctx, verify=False, reason="No specifics given"):
