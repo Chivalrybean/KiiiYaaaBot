@@ -124,7 +124,8 @@ def initiative_roll(speed):
     return f"rolled [{die}] + {speed} = {die+speed}"
 
 
-guild_ids = [701612732062892153, 351522944461307915, 744314317473579078]
+guild_ids = [701612732062892153, 351522944461307915,
+             744314317473579078, 881989509812715530]
 
 client = commands.Bot(command_prefix="/")
 slash = SlashCommand(client, sync_commands=True)
