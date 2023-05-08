@@ -1,7 +1,8 @@
-import discord
-from discord.ext import commands
-from discord_slash import SlashCommand, SlashCommandOptionType, SlashContext
-import re
+# import discord
+# from discord.ext import commands
+# from discord_slash import SlashCommand, SlashCommandOptionType, SlashContext
+
+from interactions import slash_command, SlashContext, Client
 import random as rng
 import local_settings as ls
 import asyncio
@@ -124,17 +125,16 @@ def initiative_roll(speed):
     return f"rolled [{die}] + {speed} = {die+speed}"
 
 
-guild_ids = [701612732062892153, 351522944461307915,
-             744314317473579078, 881989509812715530]
+guild_ids = [701612732062892153, 351522944461307915, 881989509812715530, 442268525835452416, 218111230433427456]
 
-client = commands.Bot(command_prefix="/")
-slash = SlashCommand(client, sync_commands=True)
+client = Client(command_prefix="/")
+# slash = SlashCommand(client, sync_commands=True)
 
 
 @client.event
 async def on_ready():
     print('The bot has logged in as {0.user}'.format(client))
-    await client.change_presence(status=discord.Status.idle, activity=discord.Game("/fs to roll"))
+    await client.change_presence(status=client.Status.idle, activity=client.Game("/fs to roll"))
 
 fs_options = [
     {
@@ -176,7 +176,7 @@ fs_options = [
 ]
 
 
-@slash.slash(name="fs", description="Outputs standard open roll for Feng Shui 2", options=fs_options, guild_ids=guild_ids)
+@slash_command(name="fs", description="Outputs standard open roll for Feng Shui 2", options=fs_options, scopes=guild_ids)
 async def _fs(ctx: SlashContext, action_value=None,  defense=None, weapon_damage=None, toughness=None, targets=None, comment=None):
     """Add in the default inputs, AV, etc. Completely rework handling the arguments here."""
     # await ctx.respond()
@@ -213,7 +213,7 @@ mook_options = [
 ]
 
 
-@slash.slash(name="mooks", description="Roll some mook rolls!", options=mook_options, guild_ids=guild_ids)
+@slash_command(name="mooks", description="Roll some mook rolls!", options=mook_options, scopes=guild_ids)
 async def _mooks(ctx: SlashContext, amount=1, action_value=8):
     # await ctx.respond()
     # channel = ctx.channel
@@ -230,7 +230,7 @@ init_options = [
 ]
 
 
-@slash.slash(name="init", description="Roll for initiative (Feng Shui 2)!", options=init_options, guild_ids=guild_ids)
+@slash_command(name="init", description="Roll for initiative (Feng Shui 2)!", options=init_options, scopes=guild_ids)
 async def _mooks(ctx: SlashContext, speed):
     # await ctx.respond()
     # channel = ctx.channel
@@ -254,7 +254,7 @@ xcard_options = [
 ]
 
 
-@slash.slash(name="d6", description="Roll a six-sided die, for fortune, or other abilities", guild_ids=guild_ids)
+@slash_command(name="d6", description="Roll a six-sided die, for fortune, or other abilities", scopes=guild_ids)
 async def _d6(ctx: SlashContext):
     # await ctx.respond()
     # channel = ctx.channel
@@ -262,7 +262,7 @@ async def _d6(ctx: SlashContext):
     await ctx.send(f"<@{user.id}> rolled a {d6()}.")
 
 
-@slash.slash(name="xcard", description="Request a pause in RPG game to redirect away from something.", guild_ids=guild_ids, options=xcard_options)
+@slash_command(name="xcard", description="Request a pause in RPG game to redirect away from something.", scopes=guild_ids, options=xcard_options)
 async def _xcard(ctx, verify=False, reason="No specifics given"):
     # await ctx.respond()
     # channel = ctx.channel
@@ -270,4 +270,4 @@ async def _xcard(ctx, verify=False, reason="No specifics given"):
     await ctx.send(f"<@{user.id}> placed an X Card on the table\n{xcard}\nReason: {reason}")
 
 
-client.run(ls.token)
+client.start(ls.token)
