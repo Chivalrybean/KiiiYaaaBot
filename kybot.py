@@ -231,7 +231,7 @@ init_options = [
 
 
 @slash_command(name="init", description="Roll for initiative (Feng Shui 2)!", options=init_options, scopes=guild_ids)
-async def _mooks(ctx: SlashContext, speed):
+async def _init(ctx: SlashContext, speed):
     # await ctx.respond()
     # channel = ctx.channel
     user = ctx.author
